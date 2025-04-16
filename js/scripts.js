@@ -3,55 +3,93 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function fetchAboutMe() {
-    // محاولة جلب بيانات aboutMeData.json
+    
     console.log('Starting to fetch About Me data...');
     fetch('./data/aboutMeData.json')  
         .then(response => {
-            console.log('Response received:', response);  // طباعة الاستجابة بعد جلبها
+            console.log('Response received:', response);  
             if (!response.ok) throw new Error('Failed to fetch About Me data');
             return response.json();
         })
         .then(data => {
-            console.log('Data received:', data);  // طباعة البيانات المستلمة
+            console.log('Data received:', data);  
             populateAboutMe(data);
         })
         .catch(error => {
-            console.error('Error loading About Me data:', error);  // طباعة أي خطأ حدث
+            console.error('Error loading About Me data:', error);  
         });
 }
 
 function populateAboutMe(data) {
-    // تحقق من وجود عنصر #aboutMe
+    
+    const mainHeader = document.querySelector('header h1');
+    if (mainHeader && data.name) {
+        mainHeader.textContent = data.name;
+    }
+
     const aboutMeContainer = document.getElementById('aboutMe');
     if (!aboutMeContainer) {
         console.error('Element #aboutMe not found in the DOM');
-        return;  // إذا لم يكن العنصر موجودًا لا نستمر في الكود
+        return;
     }
 
-    console.log('Populating About Me section with the following data:', data);  // طباعة البيانات التي سيتم استخدامها
-
-    // إنشاء عنصر الفقرة (bio)
+    
     const bioPara = document.createElement('p');
-    bioPara.textContent = data.aboutMe || "No bio available";  // إذا كانت القيمة فارغة، نضع نصًا بديلاً
-    console.log('Bio paragraph content:', bioPara.textContent);  // طباعة النص الذي سيتم إضافته
+    bioPara.textContent = data.aboutMe || "No bio available";
 
-    // إنشاء الحاوية للصورة
+    
     const headshotDiv = document.createDocumentFragment();
     const imgContainer = document.createElement('div');
     imgContainer.className = 'headshotContainer';
 
     const headshotImg = document.createElement('img');
-    headshotImg.src = data.headshot || './images/headshot.webp';  // إذا كانت الصورة غير موجودة، نضع صورة افتراضية
+    headshotImg.src = data.headshot || './images/default.jpg';
     headshotImg.alt = "Headshot";
-
-    console.log('Image source:', headshotImg.src);  // طباعة مصدر الصورة
 
     imgContainer.appendChild(headshotImg);
     headshotDiv.appendChild(imgContainer);
 
-    // إضافة الفقرة والصورة إلى عنصر #aboutMe
+    
     aboutMeContainer.appendChild(bioPara);
     aboutMeContainer.appendChild(headshotDiv);
+}
 
-    console.log('Content added to About Me section');  // طباعة إذا تم إضافة المحتوى بنجاح
+// Fetch projects data 
+function fetchProjects(){
+    console.log('Starting to fetch projects data...');
+    fetch('./data/projectsData.json')
+    .then(response =>{
+        console.log('Response received:',response);
+        if(!response.ok) throw new Error('Failed to fetch projects data');
+        return response.json();
+    })
+    .then(data =>{
+        console.log('Projects data received:',data);
+
+    })
+    .catch(error =>{
+        console.error('Error loading projects data:',error);
+    });
+}
+
+function populateProjects(projects){
+    const projectList =document.getElementById('projectList');
+    if(!projectList) return;
+
+    projects.array.forEach(project => {
+        const projectCard =document.createElement('div');
+        projectCard.className='projectCard';
+        projectCard.id=project.project_id;
+
+
+        const cardImage =project.card_image;
+        projectCard.style.backgroundImage = `url(${cardImage})`;
+        projectCard.style.backgroundSize='cover';
+        projectCard.style.backgroundPosition ='center';
+
+        const name =document.createElement('h3');
+        name.textContent=project.project_name;
+
+        
+    });
 }

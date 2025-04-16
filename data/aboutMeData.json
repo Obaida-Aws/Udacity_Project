@@ -1,4 +1,5 @@
 {
-    "aboutMe":"Your 'About Me' section is your digital handshake. It's the first impression potential employers or clients will have of you. A well-crafted section can help you stand out and showcase your skills and personality. Remember to keep it concise and engaging, highlight what sets you apart, and showcase your personality.",
-    "headshot":"../images/headshot.webp"
+    "name": "Eng. Obaida",
+    "aboutMe":"I'm Eng. Obaida a passionate web developer who is deeply committed to mastering both frontend and full stack technologies through continuous learning and hands-on experience. I strive to build accessible responsive and visually engaging websites that provide real value to users. My journey in web development is fueled by curiosity dedication and a strong desire to grow both personally and professionally. I am constantly seeking opportunities to challenge myself solve real-world problems and contribute to meaningful projects that make a difference.",
+    "headshot":"./images/headshot.webp"
 }
