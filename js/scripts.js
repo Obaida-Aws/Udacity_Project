@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetchAboutMe();
+    fetchProjects();
 });
 
 function fetchAboutMe() {
@@ -65,6 +66,7 @@ function fetchProjects(){
     })
     .then(data =>{
         console.log('Projects data received:',data);
+        populateProjects(data);
 
     })
     .catch(error =>{
@@ -76,7 +78,7 @@ function populateProjects(projects){
     const projectList =document.getElementById('projectList');
     if(!projectList) return;
 
-    projects.array.forEach(project => {
+    projects.forEach(project => {
         const projectCard =document.createElement('div');
         projectCard.className='projectCard';
         projectCard.id=project.project_id;
@@ -90,6 +92,44 @@ function populateProjects(projects){
         const name =document.createElement('h3');
         name.textContent=project.project_name;
 
-        
+        const desc =document.createElement('p');
+        desc.textContent=project.short_description || "No description available.";
+
+        projectCard.appendChild(name);
+        projectCard.appendChild(desc);
+
+        projectCard.addEventListener('click',()=>{
+            populateSpotlight(project);
+        });
+        projectList.appendChild(projectCard);
     });
+}
+
+function populateSpotlight(project) {
+    const spotlight = document.getElementById('projectSpotlight');
+    const spotlightTitles = document.getElementById('spotlightTitles');
+
+    if (!spotlight || !spotlightTitles) return;
+
+    const spotlightImage = project.spotlight_image || './images/default_spotlight.webp';
+    spotlight.style.backgroundImage = `url(${spotlightImage})`;
+    spotlight.style.backgroundSize = 'cover';
+    spotlight.style.backgroundPosition = 'center';
+
+    spotlightTitles.innerHTML = '';
+
+    const name = document.createElement('h2');
+    name.textContent = project.project_name;
+
+    const desc = document.createElement('p');
+    desc.textContent = project.long_description || "No detailed description available.";
+
+    const link = document.createElement('a');
+    link.href = project.url || '#';
+    link.target = "_blank";
+    link.textContent = "View Project";
+
+    spotlightTitles.appendChild(name);
+    spotlightTitles.appendChild(desc);
+    spotlightTitles.appendChild(link);
 }
