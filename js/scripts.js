@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetchAboutMe();
     fetchProjects();
+
+    // Set up form validation
+    setupFormValidation();
     
 
 });
@@ -80,6 +83,17 @@ function fetchProjects(){
 function populateProjects(projects){
     const projectList =document.getElementById('projectList');
     if(!projectList) return;
+
+    // If no projects are available
+    if(projects.length ===0){
+        const message=document.createElement('p');
+        message.textContent="No projects available at the moment";
+        message.style.textAlign="center";
+        message.style.padding="1rem";
+        message.style.color="#666";
+        projectList.appendChild(message);
+        return;
+    }
 
     projects.forEach(project => {
         const projectCard =document.createElement('div');
@@ -170,4 +184,88 @@ function setupProjectScroll(){
             projectList.scrollBy({top: 300,behavior :"smooth"});
         }
     });
+}
+
+
+//  Contact Form
+// Regular expressions for validation
+
+const emailRegex= /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const invalidCharacterRegex=/[^a-zA-Z0-9@._-]/;
+
+function validateEmail(email){
+    return emailRegex.test(email);
+}
+
+function validateMessage(message){
+    return !invalidCharacterRegex.test(message);
+}
+
+function updateCharactersLeft(messageInput) {
+    const charactersLeft = document.getElementById('charactersLeft');
+    const messageError = document.getElementById('messageError');
+    const currentLength = messageInput.value.length;
+    
+    // Update the characters left counter
+    charactersLeft.textContent = `Characters: ${currentLength}/300`;
+
+    // Check if the message exceeds the max length
+    if (currentLength > 300) {
+        messageError.textContent = "Message too long";
+        messageError.style.color = "red";
+    } else {
+        messageError.textContent = "";
+    }
+}
+
+
+// Form validation 
+function validateContactForm(){
+    const emailInput=document.getElementById('contactEmail');
+    const messageInput=document.getElementById('contactMessage');
+    const emailError=document.getElementById('emailError');
+    const messageError=document.getElementById('messageError');
+    let vaild=true;
+
+    // Validate email
+    if(!validateEmail(emailInput.value)){
+        emailError.textContent="Please enter a valid email address";
+        vaild=false;
+    }else{
+        emailError.textContent="";
+    }
+
+    // Validate message
+    if(messageInput.value.trim()===""){
+        messageError.textContent="Message cannot be empty ";
+        vaild=false;
+    }else if(!validateMessage(messageInput.value)){
+        messageError.textContent="Message contains invalid characters";
+        vaild=false;
+    }else{
+        messageError.textContent="";
+    }
+    return vaild;
+}
+
+function setupFormValidation(){
+    const form=document.getElementById('formSection');
+    const messageInput=document.getElementById('contactMessage');
+    const submitButton=document.getElementById('formsubmit');
+
+    form.addEventListener('submit',(event)=>{
+        event.preventDefault(); // Prevent the form from submitting
+
+        if(validateContactForm()){
+            console.log('Form is valid. Submitting...');
+        }else{
+            console.log('Form is invalid. Please correct the errors');
+        }
+    });
+
+    messageInput.addEventListener('input',()=>{
+        updateCharactersLeft(messageInput);
+    });
+
+
 }
