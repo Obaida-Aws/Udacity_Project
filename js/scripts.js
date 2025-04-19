@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetchAboutMe();
     fetchProjects();
+    
+
 });
 
 function fetchAboutMe() {
@@ -67,6 +69,7 @@ function fetchProjects(){
     .then(data =>{
         console.log('Projects data received:',data);
         populateProjects(data);
+        setupProjectScroll();
 
     })
     .catch(error =>{
@@ -132,4 +135,34 @@ function populateSpotlight(project) {
     spotlightTitles.appendChild(name);
     spotlightTitles.appendChild(desc);
     spotlightTitles.appendChild(link);
+}
+
+
+function setupProjectScroll(){
+
+    const projectList=document.getElementById('projectList');
+    const leftArrow=document.querySelector('.arrow-left');
+    const rightArrow=document.querySelector('.arrow-right');
+
+    if(!projectList || !leftArrow || !rightArrow){
+        console.warn("One or more scroll elements are missing.");
+        return;
+    }
+    leftArrow.addEventListener('click',()=>{
+        // mobile
+        if(window.innerWidth < 768){
+            projectList.scrollBy({left: -300,behavior: "smooth"});
+        }else{
+            //Desktop
+            projectList.scrollBy({top: -300, behavior:"smooth"});
+        }
+    });
+
+    rightArrow.addEventListener('click',()=>{
+        if(window.innerWidth < 768){
+            projectList.scrollBy({left : 300, behavior:"smooth"});
+        }else{
+            projectList.scrollBy({top: 300,behavior :"smooth"});
+        }
+    });
 }
