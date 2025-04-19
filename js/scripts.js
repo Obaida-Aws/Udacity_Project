@@ -106,6 +106,11 @@ function populateProjects(projects){
         });
         projectList.appendChild(projectCard);
     });
+    
+    // Automatically display the first project in the spotlight
+    if(projects.length > 0){
+        populateSpotlight(projects[0]);
+    }
 }
 
 function populateSpotlight(project) {
@@ -137,7 +142,7 @@ function populateSpotlight(project) {
     spotlightTitles.appendChild(link);
 }
 
-
+// Set up horizontal/vertical scroll
 function setupProjectScroll(){
 
     const projectList=document.getElementById('projectList');
